@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81ad531c-a600-4087-a1c4-e01ebd7d106f" name="Changes" comment="Initial shits" />
+    <list default="true" id="81ad531c-a600-4087-a1c4-e01ebd7d106f" name="Changes" comment="Initial shits">
+      <change afterPath="$PROJECT_DIR$/advapi32.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/registry.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/win_types.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/advapi32.dll.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel32.dll.py" beforeDir="false" afterPath="$PROJECT_DIR$/kernel32.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,8 +25,19 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="eb3ec61ac6741e577b7139a30a92f8ea827cac67" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "cyber-wojtek"
+  }
+}]]></component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/cyber-wojtek/-VS2022_Runner-",
@@ -51,11 +69,16 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Console Font",
+    "settings.editor.selected.configurable": "com.github.copilot.settings.keymap.KeymapConfigurable",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -74,7 +97,7 @@
       <workItem from="1757183651989" duration="132000" />
       <workItem from="1757183789014" duration="50000" />
       <workItem from="1757183844445" duration="55000" />
-      <workItem from="1757183912627" duration="2706000" />
+      <workItem from="1757183912627" duration="22751000" />
     </task>
     <task id="LOCAL-00001" summary="Initial shits">
       <option name="closed" value="true" />
@@ -84,7 +107,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757186558472</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Initial shits">
+      <option name="closed" value="true" />
+      <created>1757186650518</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1757186650518</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
