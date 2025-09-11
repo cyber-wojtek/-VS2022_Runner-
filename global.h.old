@@ -1,0 +1,133 @@
+#pragma once
+#include <cstdint>
+#include <cstddef>
+#include <vector>
+#include <unordered_map>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <chrono>
+#include <cstring>
+#include <deque>
+#include <fcntl.h>
+#include <functional>
+#include <string>
+#include "win_types.h"
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <fstream>
+
+#ifndef LIBGLOBAL_H
+#define LIBGLOBAL_H
+
+// use memory.bin file for storage.
+
+
+class DynamicTLSObject {
+public:
+    static std::string name;
+};
+
+class TLS {
+public:
+    static uint32_t last_error;
+    static uint32_t thread_id;
+    static uint32_t process_id;
+};
+
+class ProcessMemoryInfo {
+public:
+    void *mem;
+    size_t size;
+    uint32_t protect;
+    uint32_t state;
+    uint32_t type;
+};
+
+class ProcessModuleInfo {
+public:
+    void *hModule;
+    void *base_address;
+    char path[260];
+};
+
+
+class Event {
+public:
+    std::mutex mtx_;
+    std::condition_variable cv_;
+    bool flag_ = false;
+
+    // Set the event (wake up all waiting threads)
+    void set();
+
+    // Clear the event (reset to unsignaled)
+    void clear();
+
+    // Wait until the event is set
+    void wait();
+
+    // Wait with timeout, returns true if event was set
+    bool is_set();
+};
+
+class CriticalSession {
+public:
+    std::mutex mtx_;
+    std::condition_variable cv_;
+    bool in_session_ = false;
+
+    void enter();
+
+    void leave();
+};
+
+// the default ctrl+c handler is to kill the process
+BOOL DefaultCtrlCHandler(DWORD ctrl_type) {
+    if (ctrl_type == 0 /* CTRL_C_EVENT */ || ctrl_type == 1 /* CTRL_BREAK_EVENT */) {
+        // Terminate the process
+        std::exit(0);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+class ProcessInfo {
+public:
+    std::unordered_map<void*, ProcessMemoryInfo> memory_map; // key is the base address
+    std::vector<ProcessModuleInfo> modules;
+    std::vector<std::thread> threads;
+    std::vector<Event> events;
+    std::vector<std::mutex> mutexes;
+    std::vector<std::fstream> files;
+    // later add registry handles
+    std::vector<std::deque<std::function<void()>>> thread_queues; // task queues for threads
+    std::vector<CriticalSession> critical_sessions;
+    std::wstring command_line;
+    std::vector<PHANDLER_ROUTINE> ctrl_c_handlers = { DefaultCtrlCHandler };
+    std::string current_directory;
+    void *process_hmodule = nullptr; // handle to the main module (base address)
+    std::vector<TLS> tlss; // thread local storage for this process
+};
+
+class Globals {
+public:
+    std::vector<ProcessInfo> process_info; // start with one process
+    std::unordered_map<std::string, std::string> environment;
+};
+
+Globals *globals = nullptr;
+
+void alloc_globals();
+
+void reset_globals();
+
+void set_globals(Globals* g);
+
+Globals* get_globals();
+
+void free_globals();
+
+#endif // LIBGLOBAL_H
