@@ -1,83 +1,14 @@
-import random as rnd
-import os
+# advapi32.py
 from log import *
-from win_types import *
-import ctypes as ct
-import ctypes.wintypes as wt
+import globals as g
 import json
-import glob
-from pathlib import Path
-from kernel32 import SetLastError
+import base64
+from win_types import *
+import random as rnd
 
-system_rnd = rnd.SystemRandom()
-
-def CryptAcquireContextW(
-        phProv: PHCRYPTPROV,
-        szContainer: wt.LPCSTR,
-        szProvider: wt.LPCSTR,
-        dwProvType: wt.DWORD,
-        dwFlags: wt.DWORD
-) -> wt.BOOL:
-    fixme(
-        f"CryptAcquireContextW diserror-stub. phProv: {phProv}, szContainer: {szContainer}, szProvider: {szProvider}, dwProvType: {dwProvType}, dwFlags: {dwFlags}")
-    phProv[0] = 0x2137
-    SetLastError(wt.DWORD(0))  # ERROR_SUCCESS
-    ret(f"  {wt.BOOL(1)}")  # Return TRUE for success
-    return wt.BOOL(1)
-
-
-def CryptGenRandom(
-        hProv: HCRYPTPROV,
-        dwLen: wt.DWORD,
-        pbBuffer: wt.PBYTE
-) -> wt.BOOL:
-    fixme(f"CryptGenRandom diserror-stub. hProv: {hProv}, dwLen: {dwLen}, pbBuffer: {pbBuffer}")
-    # Generate proper random bytes (0-255), not just 0-1
-    for i in range(dwLen.value):
-        pbBuffer[i] = system_rnd.randint(0, 255)
-    SetLastError(wt.DWORD(0))
-    ret(f"  {wt.BOOL(1)}")  # Return TRUE for success
-    return wt.BOOL(1)
-
-
-def CryptReleaseContext(
-        hProv: HCRYPTPROV,
-        dwFlags: wt.DWORD
-) -> wt.BOOL:
-    fixme("CryptReleaseContext diserror-stub. hProv: {hProv}, dwFlags: {dwFlags}")
-    SetLastError(wt.DWORD(0))
-    ret(f"  {wt.BOOL(1)}")  # Return TRUE for success
-    return wt.BOOL(1)
-
-
-def EventRegister(
-        ProviderId: LPCGUID,
-        EnableCallback: PENABLECALLNBACK,
-        CallbackContext: wt.LPVOID,
-        RegHandle: PREGHANDLE
-) -> wt.ULONG:
-    fixme("EventRegister diserror-stub. ProviderId: {ProviderId}, EnableCallback: {EnableCallback}, CallbackContext: {CallbackContext}, RegHandle: {RegHandle}")
-    RegHandle[0] = 0x1337
-    SetLastError(wt.DWORD(0))
-    ret(f"  {wt.ULONG(0)}")  # ERROR_SUCCESS
-    return wt.ULONG(0)
-
-
-def EventWriteTransfer(
-        RegHandle: REGHANDLE,
-        EventDescriptor: PEVENT_DESCRIPTOR,
-        ActivityId: LPCGUID,
-        RelatedActivityId: LPCGUID,
-        UserDataCount: wt.ULONG,
-        UserData: PEVENT_DATA_DESCRIPTOR
-) -> wt.ULONG:
-    fixme(
-        "EventWriteTransfer diserror-stub. RegHandle: {RegHandle}, EventDescriptor: {EventDescriptor}, ActivityId: {ActivityId}, RelatedActivityId: {RelatedActivityId}, UserDataCount: {UserDataCount}, UserData: {UserData}")
-    SetLastError(wt.DWORD(0))
-    ret(f"  {wt.ULONG(0)}")  # ERROR_SUCCESS
-    return wt.ULONG(0)
-
-
+# ----------------------------
+# Registry constants
+# ----------------------------
 REG_TYPE_MAP = {
     1: "REG_SZ",
     2: "REG_EXPAND_SZ",
@@ -86,30 +17,40 @@ REG_TYPE_MAP = {
     7: "REG_MULTI_SZ",
     11: "REG_QWORD",
 }
-
 REG_TYPE_REVERSE = {v: k for k, v in REG_TYPE_MAP.items()}
 
-# Standard registry root keys mapping
-regkey_map = {
-    "HKEY_CLASSES_ROOT": HKEY(0x80000000),
-    "HKEY_CURRENT_USER": HKEY(0x80000001),
-    "HKEY_LOCAL_MACHINE": HKEY(0x80000002),
-    "HKEY_USERS": HKEY(0x80000003),
-    "HKEY_PERFORMANCE_DATA": HKEY(0x80000004),
-    "HKEY_CURRENT_CONFIG": HKEY(0x80000005),
-    "HKEY_DYN_DATA": HKEY(0x80000006),
+REGKEY_MAP = {
+    "HKEY_CLASSES_ROOT": wt.HKEY(0x80000000),
+    "HKEY_CURRENT_USER": wt.HKEY(0x80000001),
+    "HKEY_LOCAL_MACHINE": wt.HKEY(0x80000002),
+    "HKEY_USERS": wt.HKEY(0x80000003),
+    "HKEY_PERFORMANCE_DATA": wt.HKEY(0x80000004),
+    "HKEY_CURRENT_CONFIG": wt.HKEY(0x80000005),
+    "HKEY_DYN_DATA": wt.HKEY(0x80000006),
 }
+
+# ----------------------------
+# Helpers
+# ----------------------------
+def _save_registry():
+    try:
+        trace(f"Saving registry to {g.registry_file}")
+        with open(g.registry_file, "w", encoding="utf-8") as f:
+            json.dump(g.registry, f, indent=2, ensure_ascii=False)
+        trace("Registry saved successfully")
+    except Exception as e:
+        error(f"Failed to save registry: {e}")
 
 
 def _store_value(key_dict, name, value, dwType):
-    """Store value in-memory and JSON with type"""
+    trace(f"Storing value [{name=}, {value=}, {dwType=}]")
     if isinstance(value, int):
         if dwType == 4:
             store = {"type": "REG_DWORD", "value": value}
         elif dwType == 11:
             store = {"type": "REG_QWORD", "value": value}
         else:
-            raise ValueError("Invalid integer type")
+            raise ValueError(f"Invalid integer type {dwType}")
     elif isinstance(value, str):
         if dwType == 1:
             store = {"type": "REG_SZ", "value": value}
@@ -118,26 +59,24 @@ def _store_value(key_dict, name, value, dwType):
         else:
             store = {"type": "REG_SZ", "value": value}
     elif isinstance(value, bytes):
-        import base64
         store = {"type": "REG_BINARY", "value": base64.b64encode(value).decode()}
     elif isinstance(value, list) and all(isinstance(i, str) for i in value):
         store = {"type": "REG_MULTI_SZ", "value": value}
     else:
-        raise ValueError("Unsupported value type")
+        raise ValueError(f"Unsupported value type {type(value)}")
     key_dict[name] = store
     _save_registry()
 
 
 def _load_value(store):
-    """Reconstruct Python value from stored JSON"""
+    trace(f"Loading value {store}")
     typ = store["type"]
     val = store["value"]
-    if typ == "REG_DWORD" or typ == "REG_QWORD":
+    if typ in ("REG_DWORD", "REG_QWORD"):
         return int(val)
-    elif typ == "REG_SZ" or typ == "REG_EXPAND_SZ":
+    elif typ in ("REG_SZ", "REG_EXPAND_SZ"):
         return str(val)
     elif typ == "REG_BINARY":
-        import base64
         return base64.b64decode(val)
     elif typ == "REG_MULTI_SZ":
         return list(val)
@@ -145,353 +84,314 @@ def _load_value(store):
         raise ValueError(f"Unknown registry type {typ}")
 
 
-# Persistent registry
-registry_file = "registry.json"
-if os.path.exists(registry_file):
-    with open(registry_file, "r", encoding="utf-8") as f:
-        registry = json.load(f)
-else:
-    registry = {k: {} for k in regkey_map}
-
-# Dynamic handle map
-_next_handle = 0x1000
-_handle_map: dict[int, dict] = {}  # hKey -> key dict
-
-
-def _alloc_handle(key_dict: dict) -> int:
-    global _next_handle
-    h = _next_handle
-    _next_handle += 1
-    _handle_map[h] = key_dict
+def _alloc_registry_handle() -> int:
+    h = g.next_registry_handle
+    g.next_registry_handle += 1
+    trace(f"Allocating registry handle {h}")
+    g.registry_handles[h] = {}
     return h
 
 
-def _save_registry():
-    try:
-        with open(registry_file, "w", encoding="utf-8") as f:
-            json.dump(registry, f, indent=2, ensure_ascii=False)
-    except Exception as e:
-        trace(f"Failed to save registry: {e}")
-
-
 # ----------------------------
-# RegOpenKeyExW
+# Advapi32 class
 # ----------------------------
-def RegOpenKeyExW(
-        hKey: HKEY,
-        lpSubKey: wt.LPCWSTR,  # wide string
-        ulOptions: wt.DWORD,
-        samDesired: REGSAM,
-        phKeyResult: PHKEY
-) -> LSTATUS:
-    trace("RegOpenKeyExW impl. hKey: {hKey}, lpSubKey: {lpSubKey}, ulOptions: {ulOptions}, samDesired: {samDesired}")
+class Advapi32:
+    def __init__(self):
+        self.exports = {
+            "RegOpenKeyExW": self.RegOpenKeyExW,
+            "RegGetValueW": self.RegGetValueW,
+            "RegCreateKeyExW": self.RegCreateKeyExW,
+            "RegSetValueExW": self.RegSetValueExW,
+            "RegCloseKey": self.RegCloseKey,
+            "RegQueryValueExW": self.RegQueryValueExW,
+            "CryptAcquireContextW": self.CryptAcquireContextW,
+            "CryptGenRandom": self.CryptGenRandom,
+            "CryptReleaseContext": self.CryptReleaseContext,
+            "EventRegister": self.EventRegister,
+            "EventWriteTransfer": self.EventWriteTransfer,
+        }
 
-    # Map numeric hKey to string
-    top_name = None
-    for name, val in regkey_map.items():
-        if val.value == hKey:
-            top_name = name
-            break
-
-    # Handle case where hKey is already a dynamic handle
-    if top_name is None and hKey in _handle_map:
-        key_dict = _handle_map[hKey]
-    elif top_name is None:
-        SetLastError(wt.DWORD(6))  # ERROR_INVALID_HANDLE
-        ret(f"  {wt.LONG(1)}")
-        return wt.LONG(1)  # ERROR_INVALID_HANDLE
-    else:
-        key_dict = registry.get(top_name, {})
-
-    # Navigate subkeys if provided
-    if lpSubKey:
-        # lpSubKey is already a Python string (UTF-16 decoded by ctypes)
-        for part in lpSubKey.value.split("\\"):
-            if not part:  # Skip empty parts
-                continue
-            if part not in key_dict:
-                SetLastError(wt.DWORD(2))  # ERROR_FILE_NOT_FOUND
-                ret(f"  {wt.LONG(2)}")
-                return wt.LONG(2)  # ERROR_FILE_NOT_FOUND
-            key_dict = key_dict[part]
-
-    handle = _alloc_handle(key_dict)
-    phKeyResult[0] = HKEY(handle)
-
-    SetLastError(wt.DWORD(6))
-    ret(f"  {wt.LONG(0)}")
-    return wt.LONG(0)  # ERROR_SUCCESS
-
-
-# ----------------------------
-# RegGetValueW
-# ----------------------------
-def RegGetValueW(
-        hKey: HKEY,
-        lpSubKey: wt.LPCWSTR,  # wide string
-        lpValue: wt.LPCWSTR,  # wide string
-        dwFlags: wt.DWORD,
-        pdwType: wt.PDWORD,
-        pvData: wt.LPVOID,
-        pcbData: wt.PDWORD
-) -> LSTATUS:
-    trace("RegGetValueW impl. hKey: {hKey}, lpSubKey: {lpSubKey}, lpValue: {lpValue}, dwFlags: {dwFlags}")
-
-    if hKey.value not in _handle_map:
-        ret(f"  {wt.LONG(1)}")
-        return wt.LONG(1)  # ERROR_INVALID_HANDLE
-
-    key_dict = _handle_map[hKey.value]
-
-    if not key_dict:
-        SetLastError(wt.DWORD(6))
-
-    # Navigate subkey if provided
-    if lpSubKey:
-        for part in lpSubKey.split("\\"):
-            if not part:
-                continue
-            if part not in key_dict:
-                SetLastError(wt.DWORD(2))
-                ret(f"  {wt.LONG(2)}")
-                return wt.LONG(2)  # ERROR_FILE_NOT_FOUND
-            key_dict = key_dict[part]
-
-    if lpValue not in key_dict:
-        SetLastError(wt.DWORD(2))
-        ret(f"  {wt.LONG(2)}")
-        return wt.LONG(2)  # ERROR_FILE_NOT_FOUND
-
-    value_entry = key_dict[lpValue]
-
-    # Handle both old format (direct values) and new format (stored objects)
-    if isinstance(value_entry, dict) and "type" in value_entry:
-        value = _load_value(value_entry)
-        reg_type = REG_TYPE_REVERSE[value_entry["type"]]
-    else:
-        # Legacy support for direct values
-        value = value_entry
-        if isinstance(value, int):
-            reg_type = 4  # REG_DWORD
-        elif isinstance(value, str):
-            reg_type = 1  # REG_SZ
-        elif isinstance(value, bytes):
-            reg_type = 3  # REG_BINARY
+    # ----------------------------
+    # Registry APIs
+    # ----------------------------
+    @staticmethod
+    def RegOpenKeyExW(hKey, lpSubKey, ulOptions, samDesired, phKeyResult):
+        trace(f"RegOpenKeyExW called [{hKey=}, {lpSubKey=}, {ulOptions=}, {samDesired=}]")
+        top_name = None
+        for name, val in REGKEY_MAP.items():
+            if val.value == hKey:
+                top_name = name
+                break
+        if top_name:
+            trace(f"Top-level key: {top_name}")
+            key_dict = g.registry.setdefault(top_name, {})
         else:
-            SetLastError(wt.DWORD(13))
-            ret(f"  {wt.LONG(13)}")
-            return wt.LONG(13)  # ERROR_INVALID_DATA
+            if hKey in g.registry_handles:
+                key_dict = g.registry_handles[hKey]
+                trace(f"Using dynamic handle {hKey}")
+            else:
+                from kernel32 import Kernel32
+                error(f"Invalid registry handle {hKey}")
+                Kernel32.SetLastError(wt.DWORD(6))
+                return wt.LONG(1)
+        if lpSubKey:
+            for part in lpSubKey.value.split("\\"):
+                if not part:
+                    continue
+                if part not in key_dict:
+                    from kernel32 import Kernel32
+                    error(f"Subkey not found: {lpSubKey.value}")
+                    Kernel32.SetLastError(wt.DWORD(2))
+                    return wt.LONG(2)
+                key_dict = key_dict[part]
+        handle = _alloc_registry_handle()
+        g.registry_handles[handle] = key_dict
+        phKeyResult[0] = wt.HKEY(handle)
+        trace(f"RegOpenKeyExW returning handle {handle}")
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        return wt.LONG(0)
 
-    # Set type if requested
-    if pdwType:
-        pdwType[0] = wt.DWORD(reg_type)
+    @staticmethod
+    def RegCreateKeyExW(hKey, lpSubKey, Reserved, lpClass, dwOptions, samDesired, lpSecurityAttributes, phKeyResult, lpdwDisposition):
+        trace(f"RegCreateKeyExW called [{hKey=}, {lpSubKey=}]")
+        if hKey in g.registry_handles:
+            key_dict = g.registry_handles[hKey]
+            created_new = False
+        else:
+            top_name = None
+            for name, val in REGKEY_MAP.items():
+                if val.value == hKey:
+                    top_name = name
+                    break
+            if top_name:
+                key_dict = g.registry.setdefault(top_name, {})
+                created_new = False
+            else:
+                from kernel32 import Kernel32
+                error(f"Invalid handle {hKey}")
+                Kernel32.SetLastError(wt.DWORD(6))
+                return wt.LONG(1)
+        if lpSubKey:
+            for part in lpSubKey.value.split("\\"):
+                if part not in key_dict:
+                    key_dict[part] = {}
+                    created_new = True
+                key_dict = key_dict[part]
+        handle = _alloc_registry_handle()
+        g.registry_handles[handle] = key_dict
+        phKeyResult[0] = wt.HKEY(handle)
+        if lpdwDisposition is not None:
+            lpdwDisposition[0] = wt.DWORD(1 if created_new else 2)
+        _save_registry()
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        trace(f"RegCreateKeyExW returning handle {handle}, new: {created_new}")
+        return wt.LONG(0)
 
-    # Encode data based on type
-    if reg_type == 4:  # REG_DWORD
-        data = value.to_bytes(4, "little")
-    elif reg_type == 11:  # REG_QWORD
-        data = value.to_bytes(8, "little")
-    elif reg_type in (1, 2):  # REG_SZ, REG_EXPAND_SZ
-        data = value.encode("utf-16le") + b"\x00\x00"
-    elif reg_type == 3:  # REG_BINARY
-        data = value
-    elif reg_type == 7:  # REG_MULTI_SZ
-        data = "\x00".join(value).encode("utf-16le") + b"\x00\x00\x00\x00"
-    else:
-        ret(f"  {wt.LONG(13)}")
-        return wt.LONG(13)  # ERROR_INVALID_DATA
-
-    # Copy to buffer if provided
-    if pvData and pcbData:
-        buf_size = pcbData[0]
-        n = min(len(data), buf_size)
-        ct.memmove(pvData, data, n)
-        pcbData[0] = wt.DWORD(len(data))
-    elif pcbData:
-        # Just return required size
-        pcbData[0] = wt.DWORD(len(data))
-
-    SetLastError(wt.DWORD(0))
-    ret(f"  {wt.LONG(0)}")
-    return wt.LONG(0)  # ERROR_SUCCESS
-
-
-def RegCreateKeyExW(
-        hKey: HKEY,
-        lpSubKey: wt.LPCWSTR,
-        Reserved: wt.DWORD,
-        lpClass: wt.LPCWSTR,
-        dwOptions: wt.DWORD,
-        samDesired: REGSAM,
-        lpSecurityAttributes,
-        phKeyResult: PHKEY,
-        lpdwDisposition
-) -> LSTATUS:
-    trace("RegCreateKeyExW impl. hKey: {hKey}, lpSubKey: {lpSubKey}, dwOptions: {dwOptions}")
-
-    # Map numeric hKey to string
-    top_name = None
-    for name, val in regkey_map.items():
-        if val.value == hKey.value:
-            top_name = name
-            break
-
-    # Handle dynamic handles
-    if top_name is None and hKey.value in _handle_map:
-        key_dict = _handle_map[hKey.value]
-        created_new = False
-    elif top_name is None:
-        SetLastError(wt.DWORD(6))  # ERROR_INVALID_HANDLE
-        ret(f"  {wt.LONG(1)}")
-        return wt.LONG(1)  # ERROR_INVALID_HANDLE
-    else:
-        key_dict = registry.setdefault(top_name, {})
-        created_new = False
-
-    if lpSubKey:
-        for part in lpSubKey.value.split("\\"):
-            if not part:
-                continue
-            if part not in key_dict:
-                key_dict[part] = {}
-                created_new = True
-            key_dict = key_dict[part]
-
-    handle = _alloc_handle(key_dict)
-    phKeyResult[0] = HKEY(handle)
-
-    if lpdwDisposition is not None:
-        lpdwDisposition[0] = wt.DWORD(1 if created_new else 2)  # 1=REG_CREATED_NEW_KEY, 2=REG_OPENED_EXISTING_KEY
-
-    _save_registry()
-    SetLastError(wt.DWORD(0)) # ERROR_SUCCESS
-    ret(f"  {wt.LONG(0)}")
-    return wt.LONG(0)  # ERROR_SUCCESS
-
-
-def RegSetValueExW(
-        hKey: HKEY,
-        lpValueName: wt.LPCWSTR,
-        Reserved: wt.DWORD,
-        dwType: wt.DWORD,
-        lpData: wt.LPVOID,
-        cbData: wt.DWORD
-) -> LSTATUS:
-    trace(f"RegSetValueExW impl. hKey={hKey}, lpValueName={lpValueName}, dwType={dwType}, cbData={cbData}")
-    key_dict = _handle_map.get(hKey.value)
-    if not key_dict:
-        SetLastError(wt.DWORD(6))
-        return wt.LONG(1)  # ERROR_INVALID_HANDLE
-
-    # Convert lpData to Python value
-    try:
-        if dwType == 1 or dwType == 2:  # REG_SZ or REG_EXPAND_SZ
-            # Handle null-terminated wide strings
-            raw_data = ct.string_at(lpData, cbData.value)
+    @staticmethod
+    def RegSetValueExW(hKey, lpValueName, Reserved, dwType, lpData, cbData):
+        trace(f"RegSetValueExW called [{hKey=}, {lpValueName=}, {dwType=}, {cbData=}]")
+        if hKey not in g.registry_handles:
+            from kernel32 import Kernel32
+            error(f"Invalid handle {hKey}")
+            Kernel32.SetLastError(wt.DWORD(6))
+            return wt.LONG(1)
+        key_dict = g.registry_handles[hKey]
+        if dwType in (1, 2):
+            raw_data = ct.string_at(lpData, cbData)
             value = raw_data.decode("utf-16le").rstrip('\0')
-        elif dwType == 3:  # REG_BINARY
-            value = ct.string_at(lpData, cbData.value)
-        elif dwType == 4:  # REG_DWORD
+        elif dwType == 3:
+            value = ct.string_at(lpData, cbData)
+        elif dwType == 4:
             value = int.from_bytes(ct.string_at(lpData, 4), "little")
-        elif dwType == 7:  # REG_MULTI_SZ
-            raw_bytes = ct.string_at(lpData, cbData.value)
-            decoded = raw_bytes.decode("utf-16le")
-            # Split on null chars and filter empty strings (except final empty from double-null)
-            value = [s for s in decoded.split("\x00") if s]
-        elif dwType == 11:  # REG_QWORD
+        elif dwType == 11:
             value = int.from_bytes(ct.string_at(lpData, 8), "little")
+        elif dwType == 7:
+            raw_bytes = ct.string_at(lpData, cbData)
+            value = [s for s in raw_bytes.decode("utf-16le").split("\x00") if s]
         else:
-            SetLastError(wt.DWORD(13))
-            return wt.LONG(13)  # ERROR_INVALID_DATA
-    except Exception as e:
-        error(f"  Error converting registry data: {e}")
-        SetLastError(wt.DWORD(13))
-        ret(f"  {wt.LONG(13)}")
-        return wt.LONG(13)  # ERROR_INVALID_DATA
+            from kernel32 import Kernel32
+            error(f"Unsupported registry type {dwType}")
+            Kernel32.SetLastError(wt.DWORD(13))
+            return wt.LONG(13)
+        _store_value(key_dict, lpValueName, value, dwType)
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        trace(f"RegSetValueExW stored [{lpValueName}=...]")
+        return wt.LONG(0)
 
-    _store_value(key_dict, lpValueName, value, dwType)
-    SetLastError(wt.DWORD(0))
-    ret(f"  {wt.LONG(0)}")
-    return wt.LONG(0)  # ERROR_SUCCESS
+    @staticmethod
+    def RegCloseKey(hKey):
+        trace(f"RegCloseKey called [{hKey=}]")
+        if hKey in g.registry_handles:
+            del g.registry_handles[hKey]
+            from kernel32 import Kernel32
+            Kernel32.SetLastError(wt.DWORD(0))
+            trace(f"RegCloseKey closed handle {hKey}")
+            return wt.LONG(0)
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(6))
+        error(f"RegCloseKey invalid handle {hKey}")
+        return wt.LONG(1)
 
-
-def RegCloseKey(
-        hKey: HKEY
-) -> LSTATUS:
-    trace("RegCloseKey impl. hKey: {hKey}")
-
-    if hKey.value in _handle_map:
-        del _handle_map[hKey.value]
-        SetLastError(wt.DWORD(0))
-        ret(f"  {wt.LONG(0)}")
-        return wt.LONG(0)  # ERROR_SUCCESS
-    SetLastError(wt.DWORD(6))  # ERROR_INVALID_HANDLE
-    ret(f"  {wt.LONG(1)}")
-    return wt.LONG(1)  # ERROR_INVALID_HANDLE
-
-
-def RegQueryValueExW(
-        hKey: HKEY,
-        lpValueName: wt.LPCWSTR,
-        lpReserved: wt.LPDWORD,
-        pdwType: wt.PDWORD,
-        pvData: wt.LPVOID,
-        pcbData: wt.PDWORD
-) -> LSTATUS:
-    trace(f"RegQueryValueExW impl. hKey={hKey}, lpValueName={lpValueName}")
-
-    key_dict = _handle_map.get(hKey.value)
-    if not key_dict:
-        return wt.LONG(1)  # ERROR_INVALID_HANDLE
-    if lpValueName not in key_dict:
-        return wt.LONG(2)  # ERROR_FILE_NOT_FOUND
-
-    value_entry = key_dict[lpValueName]
-
-    # Handle both stored format and legacy direct values
-    if isinstance(value_entry, dict) and "type" in value_entry:
+    @staticmethod
+    def RegQueryValueExW(hKey, lpValueName, lpReserved, pdwType, pvData, pcbData):
+        trace(f"RegQueryValueExW called [{hKey=}, {lpValueName=}]")
+        if hKey not in g.registry_handles:
+            from kernel32 import Kernel32
+            error(f"Invalid handle {hKey}")
+            Kernel32.SetLastError(wt.DWORD(6))
+            return wt.LONG(1)
+        key_dict = g.registry_handles[hKey]
+        if lpValueName not in key_dict:
+            from kernel32 import Kernel32
+            error(f"Value {lpValueName} not found")
+            Kernel32.SetLastError(wt.DWORD(2))
+            return wt.LONG(2)
+        value_entry = key_dict[lpValueName]
         value = _load_value(value_entry)
         reg_type = REG_TYPE_REVERSE[value_entry["type"]]
-    else:
-        # Legacy direct value
-        value = value_entry
-        if isinstance(value, int):
-            reg_type = 4
-        elif isinstance(value, str):
-            reg_type = 1
-        elif isinstance(value, bytes):
-            reg_type = 3
+        if pdwType:
+            pdwType[0] = wt.DWORD(reg_type)
+        if reg_type in (1, 2):
+            data_bytes = value.encode("utf-16le") + b"\x00\x00"
+        elif reg_type == 7:
+            data_bytes = "\x00".join(value).encode("utf-16le") + b"\x00\x00\x00\x00"
+        elif reg_type == 4:
+            data_bytes = value.to_bytes(4, "little")
+        elif reg_type == 11:
+            data_bytes = value.to_bytes(8, "little")
+        elif reg_type == 3:
+            data_bytes = value
         else:
-            SetLastError(wt.DWORD(13))
-            return wt.LONG(13)  # ERROR_INVALID_DATA
+            from kernel32 import Kernel32
+            error(f"Unsupported registry type {reg_type}")
+            Kernel32.SetLastError(wt.DWORD(13))
+            return wt.LONG(13)
+        if pvData and pcbData:
+            n = min(pcbData[0], len(data_bytes))
+            ct.memmove(pvData, data_bytes, n)
+            pcbData[0] = wt.DWORD(len(data_bytes))
+            trace(f"Copied {n} bytes to pvData")
+        elif pcbData:
+            pcbData[0] = wt.DWORD(len(data_bytes))
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        trace("RegQueryValueExW completed successfully")
+        return wt.LONG(0)
 
-    if pdwType:
-        pdwType[0] = wt.DWORD(reg_type)
+    @staticmethod
+    def RegGetValueW(hKey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData):
+        trace(f"RegGetValueW called [{hKey=}, {lpSubKey=}, {lpValue=}, {dwFlags=}]")
+        top_name = None
+        for name, val in REGKEY_MAP.items():
+            if val.value == hKey:
+                top_name = name
+                break
+        if top_name:
+            key_dict = g.registry.setdefault(top_name, {})
+        else:
+            if hKey in g.registry_handles:
+                key_dict = g.registry_handles[hKey]
+            else:
+                from kernel32 import Kernel32
+                error(f"Invalid registry handle {hKey}")
+                Kernel32.SetLastError(wt.DWORD(6))
+                return wt.LONG(1)
+        if lpSubKey:
+            for part in lpSubKey.value.split("\\"):
+                if not part:
+                    continue
+                if part not in key_dict:
+                    from kernel32 import Kernel32
+                    error(f"Subkey not found: {lpSubKey.value}")
+                    Kernel32.SetLastError(wt.DWORD(2))
+                    return wt.LONG(2)
+                key_dict = key_dict[part]
+        if lpValue.value not in key_dict:
+            from kernel32 import Kernel32
+            error(f"Value {lpValue.value} not found")
+            Kernel32.SetLastError(wt.DWORD(2))
+            return wt.LONG(2)
+        value_entry = key_dict[lpValue.value]
+        value = _load_value(value_entry)
+        reg_type = REG_TYPE_REVERSE[value_entry["type"]]
+        if pdwType:
+            pdwType[0] = wt.DWORD(reg_type)
+        if reg_type in (1, 2):
+            data_bytes = value.encode("utf-16le") + b"\x00\x00"
+        elif reg_type == 7:
+            data_bytes = "\x00".join(value).encode("utf-16le") + b"\x00\x00\x00\x00"
+        elif reg_type == 4:
+            data_bytes = value.to_bytes(4, "little")
+        elif reg_type == 11:
+            data_bytes = value.to_bytes(8, "little")
+        elif reg_type == 3:
+            data_bytes = value
+        else:
+            from kernel32 import Kernel32
+            error(f"Unsupported registry type {reg_type}")
+            Kernel32.SetLastError(wt.DWORD(13))
+            return wt.LONG(13)
+        if pvData and pcbData:
+            n = min(pcbData[0], len(data_bytes))
+            ct.memmove(pvData, data_bytes, n)
+            pcbData[0] = wt.DWORD(len(data_bytes))
+            trace(f"Copied {n} bytes to pvData")
+        elif pcbData:
+            pcbData[0] = wt.DWORD(len(data_bytes))
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        trace("RegGetValueW completed successfully")
+        return wt.LONG(0)
 
-    # Encode data for output
-    if reg_type in (1, 2):  # REG_SZ, REG_EXPAND_SZ
-        data_bytes = value.encode("utf-16le") + b"\x00\x00"
-    elif reg_type == 7:  # REG_MULTI_SZ
-        data_bytes = "\x00".join(value).encode("utf-16le") + b"\x00\x00\x00\x00"
-    elif reg_type == 4:  # REG_DWORD
-        data_bytes = value.to_bytes(4, "little")
-    elif reg_type == 11:  # REG_QWORD
-        data_bytes = value.to_bytes(8, "little")
-    elif reg_type == 3:  # REG_BINARY
-        data_bytes = value
-    else:
-        SetLastError(wt.DWORD(13))
-        return wt.LONG(13)  # ERROR_INVALID_DATA
+    # ----------------------------
+    # Cryptography APIs (stubs)
+    # ----------------------------
+    @staticmethod
+    def CryptAcquireContextW(phProv: PHCRYPTPROV, szContainer: wt.LPCSTR, szProvider: wt.LPCSTR, dwProvType: wt.DWORD, dwFlags: wt.DWORD) -> wt.BOOL:
+        fixme(f"CryptAcquireContextW diserror-stub. {locals()}")
+        phProv[0] = 0x2137
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        ret(f"{wt.BOOL(1)}")
+        return wt.BOOL(1)
 
-    # Copy to buffer if provided
-    if pvData and pcbData:
-        max_len = pcbData[0]
-        n = min(len(data_bytes), max_len)
-        ct.memmove(pvData, data_bytes, n)
-        pcbData[0] = wt.DWORD(len(data_bytes))
-    elif pcbData:
-        pcbData[0] = wt.DWORD(len(data_bytes))
+    @staticmethod
+    def CryptGenRandom(hProv: HCRYPTPROV, dwLen: wt.DWORD, pbBuffer: wt.PBYTE) -> wt.BOOL:
+        fixme(f"CryptGenRandom semi-stub. {locals()}")
+        for i in range(dwLen.value):
+            pbBuffer[i] = g.system_rnd.randint(0, 255)
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        ret(f"{wt.BOOL(1)}")
+        return wt.BOOL(1)
 
-    SetLastError(wt.DWORD(0))
-    ret(f"  {wt.LONG(0)}")
-    return wt.LONG(0)  # ERROR_SUCCESS
+    @staticmethod
+    def CryptReleaseContext(hProv: HCRYPTPROV, dwFlags: wt.DWORD) -> wt.BOOL:
+        fixme(f"CryptReleaseContext diserror-stub. {locals()}")
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        ret(f"{wt.BOOL(1)}")
+        return wt.BOOL(1)
+
+    # ----------------------------
+    # Eventing APIs (stubs)
+    # ----------------------------
+    @staticmethod
+    def EventRegister(ProviderId: LPCGUID, EnableCallback: PENABLECALLNBACK, CallbackContext: wt.LPVOID, RegHandle: PREGHANDLE) -> wt.ULONG:
+        fixme(f"EventRegister diserror-stub. {locals()}")
+        RegHandle[0] = 0x1337
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        ret(f"{wt.ULONG(0)}")
+        return wt.ULONG(0)
+
+    @staticmethod
+    def EventWriteTransfer(RegHandle: REGHANDLE, EventDescriptor: PEVENT_DESCRIPTOR, ActivityId: LPCGUID, RelatedActivityId: LPCGUID, UserDataCount: wt.ULONG, UserData: PEVENT_DATA_DESCRIPTOR) -> wt.ULONG:
+        fixme(f"EventWriteTransfer diserror-stub. {locals()}")
+        from kernel32 import Kernel32
+        Kernel32.SetLastError(wt.DWORD(0))
+        ret(f"{wt.ULONG(0)}")
+        return wt.ULONG(0)
