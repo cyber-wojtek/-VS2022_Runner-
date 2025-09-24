@@ -24,7 +24,7 @@ def load_pe_with_hooks(filename, dll_search_paths=None):
     # Parse imports
     if hasattr(pe, 'DIRECTORY_ENTRY_IMPORT'):
         for entry in pe.DIRECTORY_ENTRY_IMPORT:
-            dll_name = entry.dll.decode('utf-8')
+            dll_name = entry.DLL.decode('utf-8')
             print(f"Import DLL: {dll_name}")
             py_module = dll_overrides.get(dll_name.upper())
             for imp in entry.imports:

@@ -1,9 +1,49 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>acceptsock</w>
+      <w>addrlen</w>
+      <w>beginthreadex</w>
+      <w>diserror</w>
+      <w>envvar</w>
+      <w>farproc</w>
+      <w>fpword</w>
+      <w>getpeername</w>
       <w>hiberfil</w>
+      <w>idonotcare</w>
+      <w>idontcare</w>
+      <w>lpbool</w>
+      <w>lpcch</w>
+      <w>lpcontext</w>
+      <w>lpcwch</w>
+      <w>lpdword</w>
+      <w>lpfiletime</w>
+      <w>lpfl</w>
+      <w>lplong</w>
+      <w>lpoverlapped</w>
+      <w>lpsecurity</w>
+      <w>lpstartupinfow</w>
+      <w>lpsystem</w>
+      <w>lpthread</w>
+      <w>lptop</w>
+      <w>lpwch</w>
+      <w>lpwin</w>
       <w>pagefile</w>
+      <w>papcfunc</w>
+      <w>pcontext</w>
+      <w>pdword</w>
+      <w>pexception</w>
+      <w>plarge</w>
+      <w>plong</w>
+      <w>pmemory</w>
+      <w>pruntime</w>
+      <w>pslist</w>
+      <w>pularge</w>
+      <w>pulong</w>
+      <w>pvoid</w>
       <w>refcnt</w>
+      <w>strotoul</w>
+      <w>ulong</w>
     </words>
   </dictionary>
 </component>

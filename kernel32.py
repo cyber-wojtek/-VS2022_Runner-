@@ -17,9 +17,9 @@ def _normalize_module_name(mod_name: str) -> str:
     # trailing dot => no extension
     if mod_name.endswith('.'):
         mod_name = mod_name[:-1]
-    # add .dll if no extension
+    # add .DLL if no extension
     if not os.path.splitext(mod_name)[1]:
-        mod_name = mod_name + ".dll"
+        mod_name = mod_name + ".DLL"
     return os.path.basename(mod_name).lower()
 
 class Kernel32:

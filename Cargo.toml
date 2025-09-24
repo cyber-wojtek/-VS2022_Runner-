@@ -1,0 +1,17 @@
+# lib.rs file is exported as a library crate for use within C++ projects. (needs nt-apiset crate & pelite crate)
+[package]
+name = "nt-apiset-cpp-hooks"
+version = "0.1.0"
+edition = "2024"
+authors = ["Wojciech Dudek"]
+description = "A Rust library for hooking nt-apiset functions in C++ projects."
+license = "MIT"
+
+[lib]
+name = "nt_apiset_cpp_hooks"
+crate-type = ["cdylib"]
+path = "nt_apiset_cpp_hooks/lib.rs"
+
+[dependencies]
+nt-apiset = "0.1"
+pelite = "0.10"

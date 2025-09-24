@@ -7,7 +7,8 @@
     <option name="/Default/Environment/UserInterface/HierarchyView/ViewStyle/@EntryValue" value="SuperTypes" type="string" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/LiveTemplatesHousekeeping/HotspotSessionHintIsShown/@EntryValue" value="true" type="bool" />
-    <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="CppGeneralOptions" type="string" />
+    <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="Cpp.Editor" type="string" />
+    <option name="/Default/Housekeeping/RefactoringsMru/RenameRefactoring/DoSearchForTextInStrings/@EntryValue" value="true" type="bool" />
   </component>
   <component name="CMakePresetLoader">{
   &quot;useNewFormat&quot;: true
@@ -20,39 +21,52 @@
   </component>
   <component name="CMakeRunConfigurationManager">
     <generated>
-      <config projectName="_VS2022_Runner_" targetName="_VS2022_Runner_" />
+      <config projectName="whisky_" targetName="whisky_" />
+      <config projectName="whisky_" targetName="_VS2022_Runner_" />
+      <config projectName="whisky_" targetName="nt_apiset_cpp_hooks_" />
     </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
-      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
-      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" />
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_EXTENSIONS=ON" BUILD_OPTIONS="-j 26" />
+      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" GENERATION_OPTIONS="-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_EXTENSIONS=ON" />
     </configurations>
   </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml">
+      <package file="$PROJECT_DIR$">
+        <feature name="default" enabled="true" />
+      </package>
+    </cargoProject>
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="81ad531c-a600-4087-a1c4-e01ebd7d106f" name="Changes" comment="a lot of stuff">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/_VS2022_Runner_.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/global.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/global.h.old" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kernel32.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/log.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/win_types.h" afterDir="false" />
+    <list default="true" id="81ad531c-a600-4087-a1c4-e01ebd7d106f" name="Changes" comment="migration from shitty python code to less shitty C++ code">
+      <change afterPath="$PROJECT_DIR$/.clangd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/global.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kernel32.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nt_apiset_cpp_hooks.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nt_apiset_cpp_hooks/lib.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ucrtbase.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ucrtbase.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vcruntime140.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vcruntime140.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/?VS2022_Runner?.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/?VS2022_Runner?.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/advapi32.py" beforeDir="false" afterPath="$PROJECT_DIR$/advapi32.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/global.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/global.h.old" beforeDir="false" afterPath="$PROJECT_DIR$/global.h.old" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel32.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/kernel32.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/kernel32.py" beforeDir="false" afterPath="$PROJECT_DIR$/kernel32.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pe_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/pe_imports.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/win_types.py" beforeDir="false" afterPath="$PROJECT_DIR$/win_types.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/win_types.h" beforeDir="false" afterPath="$PROJECT_DIR$/win_types.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +76,7 @@
   <component name="ClangdSettings">
     <option name="clangTidyViaClangd" value="false" />
     <option name="formatViaClangd" value="false" />
+    <option name="clangWarnings" value="-Wno-unused-variable,-Wno-infinite-recursion,-Wno-array-bounds,-Wno-return-stack-address,-Werror=implicit-function-declaration,-Wshadow,-Wno-shadow-field-in-constructor-modified,-Wno-shadow-ivar,-Wuninitialized,-Wunused-label,-Wunused-lambda-capture,-Wno-reserved-id-macro,-Wno-reserved-identifier" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileTemplateManagerImpl">
@@ -92,8 +107,13 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/global.cpp.old" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/global.h.old" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file:///usr/include/LIEF/ELF/NoteDetails/core/CorePrStatus.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/LIEF/PE/exceptions_info/RuntimeFunctionX64.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/bits/semaphore.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="InvalidFacetManager">
     <ignored-facets>
@@ -102,6 +122,12 @@
   </component>
   <component name="LLMProjectSettings">
     <option name="turned_on" value="false" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="XK8ietAr" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -123,6 +149,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;CMake Application._VS2022_Runner_.executor&quot;: &quot;Run&quot;,
+    &quot;CMake Application.whisky_.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
@@ -142,23 +169,31 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+  <component name="RunManager" selected="CMake Application.whisky_">
+    <configuration name="_VS2022_Runner_" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="whisky_" TARGET_NAME="_VS2022_Runner_" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="whisky_" RUN_TARGET_NAME="_VS2022_Runner_">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="_VS2022_Runner_" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="_VS2022_Runner_" RUN_TARGET_NAME="_VS2022_Runner_" EXPLICIT_BUILD_TARGET_NAME="all">
+    <configuration name="nt_apiset_cpp_hooks_" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="whisky_" TARGET_NAME="nt_apiset_cpp_hooks_" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="whisky_" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="whisky_" TARGET_NAME="whisky_" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="whisky_" RUN_TARGET_NAME="whisky_">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -179,6 +214,14 @@
       <option name="uvSdkKey" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="CMake Application._VS2022_Runner_" />
+      <item itemvalue="CMake Application.nt_apiset_cpp_hooks_" />
+      <item itemvalue="CMake Application.whisky_" />
+    </list>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="/usr/bin" />
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -208,7 +251,20 @@
       <workItem from="1757601061158" duration="695000" />
       <workItem from="1757601785921" duration="39000" />
       <workItem from="1757602088174" duration="4060000" />
-      <workItem from="1757606250946" duration="12528000" />
+      <workItem from="1757606250946" duration="31900000" />
+      <workItem from="1757678760120" duration="41232000" />
+      <workItem from="1757755036654" duration="11578000" />
+      <workItem from="1757770922912" duration="42302000" />
+      <workItem from="1757869650671" duration="10311000" />
+      <workItem from="1758045298547" duration="91543000" />
+      <workItem from="1758366799089" duration="53000" />
+      <workItem from="1758366862459" duration="27209000" />
+      <workItem from="1758452004907" duration="8008000" />
+      <workItem from="1758463590387" duration="44000" />
+      <workItem from="1758463692266" duration="2718000" />
+      <workItem from="1758466479341" duration="18083000" />
+      <workItem from="1758550843582" duration="10000" />
+      <workItem from="1758550976423" duration="28825000" />
     </task>
     <task id="LOCAL-00001" summary="Initial shits">
       <option name="closed" value="true" />
@@ -234,7 +290,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757244902451</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="a lot of stuff">
+      <option name="closed" value="true" />
+      <created>1757618980872</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1757618980872</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -270,6 +334,17 @@
     <MESSAGE value="Initial shits" />
     <MESSAGE value="a lot of stuff" />
     <option name="LAST_COMMIT_MESSAGE" value="a lot of stuff" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/global.h</url>
+          <line>88</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
