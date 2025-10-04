@@ -16,15 +16,20 @@ add_executable(_VS2022_Runner_
         vcruntime140.hpp
         vcruntime140.cpp
         nt_apiset_cpp_hooks.hpp
+        whisky_rr_.cpp
+        whisky_.cpp
 )
 
 project(whisky_)
 
 set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_CXX_STANDARD 23)
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(whisky_ "whisky_.cpp")
+
+target_compile_options(whisky_ PUBLIC "-fconcepts-diagnostics-depth=5")
 
 target_include_directories(whisky_ PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

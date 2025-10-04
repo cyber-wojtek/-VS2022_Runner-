@@ -1,6 +1,7 @@
 //
 // Created by wojtek on 9/10/25.
 //
+#if 0
 
 #ifndef _VS2022_RUNNER__GLOBAL_H
 #define _VS2022_RUNNER__GLOBAL_H
@@ -440,3 +441,4 @@ struct EmulatedExport {
 };
 
 #endif //_VS2022_RUNNER__GLOBAL_H
+#endif

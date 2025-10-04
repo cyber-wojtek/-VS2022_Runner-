@@ -10,7 +10,7 @@ extern "C" {
         const char* filename,
         const char* funcname,
         char* result
-);
+    );
 }
 
 #endif //WHISKY__NT_APISET_CPP_HOOKS_HPP

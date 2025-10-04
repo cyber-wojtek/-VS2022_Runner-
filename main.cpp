@@ -9,7 +9,6 @@
 #include <functional>
 #include <thread>
 #include <mutex>
-#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -23,7 +22,12 @@
 // backtrace()
 #include <execinfo.h>
 
-#include "global.h"
+#include <dlfcn.h>
+#include <cxxabi.h>
+#include <unwind.h>
+#define unw_local_only
+#include <libunwind.h>
+//#include "global.h"
 #include "win_types.h"
 #include "log.h"
 #include "kernel32.hpp"
@@ -31,13 +35,8 @@
 #include "vcruntime140.hpp"
 
 // DL*
-#include <dlfcn.h>
 
 // unwind
-#include <cxxabi.h>
-#include <unwind.h>
-#define UNW_LOCAL_ONLY
-#include <libunwind.h>
 
 std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
@@ -1717,7 +1716,7 @@ public:
             // Show sample exports by type
             if (!functions.empty()) {
                 report << "    Sample functions: ";
-                for (size_t i = 0; i < std::min(functions.size(), size_t(5)); ++i) {
+                for (size_t i = 0; i < min(functions.size(), size_t(5)); ++i) {
                     if (i > 0) report << ", ";
                     report << functions[i].name << " (@" << functions[i].section_name << ")";
                 }
@@ -1727,7 +1726,7 @@ public:
 
             if (!variables.empty()) {
                 report << "    Sample variables: ";
-                for (size_t i = 0; i < std::min(variables.size(), size_t(3)); ++i) {
+                for (size_t i = 0; i < min(variables.size(), size_t(3)); ++i) {
                     if (i > 0) report << ", ";
                     report << variables[i].name << " (@" << variables[i].section_name << ")";
                 }
@@ -1737,7 +1736,7 @@ public:
 
             if (!forwarded.empty()) {
                 report << "    Sample forwards: ";
-                for (size_t i = 0; i < std::min(forwarded.size(), size_t(3)); ++i) {
+                for (size_t i = 0; i < min(forwarded.size(), size_t(3)); ++i) {
                     if (i > 0) report << ", ";
                     report << forwarded[i].name << " -> " << forwarded[i].forward_dll
                            << "!" << forwarded[i].forward_function;

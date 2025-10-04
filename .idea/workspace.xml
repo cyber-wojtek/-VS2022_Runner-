@@ -8,7 +8,6 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/LiveTemplatesHousekeeping/HotspotSessionHintIsShown/@EntryValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="Cpp.Editor" type="string" />
-    <option name="/Default/Housekeeping/RefactoringsMru/RenameRefactoring/DoSearchForTextInStrings/@EntryValue" value="true" type="bool" />
   </component>
   <component name="CMakePresetLoader">{
   &quot;useNewFormat&quot;: true
@@ -40,33 +39,16 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81ad531c-a600-4087-a1c4-e01ebd7d106f" name="Changes" comment="migration from shitty python code to less shitty C++ code">
-      <change afterPath="$PROJECT_DIR$/.clangd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/global.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/kernel32.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nt_apiset_cpp_hooks.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nt_apiset_cpp_hooks/lib.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ucrtbase.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ucrtbase.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vcruntime140.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vcruntime140.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/?VS2022_Runner?.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/?VS2022_Runner?.iml" afterDir="false" />
+    <list default="true" id="81ad531c-a600-4087-a1c4-e01ebd7d106f" name="Changes" comment="sth">
+      <change afterPath="$PROJECT_DIR$/whisky__2.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/whisky_rr_.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/global.h" beforeDir="false" afterPath="$PROJECT_DIR$/global.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/global.h.old" beforeDir="false" afterPath="$PROJECT_DIR$/global.h.old" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel32.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/kernel32.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kernel32.py" beforeDir="false" afterPath="$PROJECT_DIR$/kernel32.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pe_imports.py" beforeDir="false" afterPath="$PROJECT_DIR$/pe_imports.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/win_types.h" beforeDir="false" afterPath="$PROJECT_DIR$/win_types.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nt_apiset_cpp_hooks.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/nt_apiset_cpp_hooks.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/whisky_.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/whisky_.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,11 +91,41 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/afd.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/cdrom.c" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/global.cpp.old" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/global.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/global.h.old" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/inaddr.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/kernel32.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/kernel32.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/main.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/nt_apiset_cpp_hooks.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ntstatus.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ucrtbase.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ucrtbase.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/whisky_.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/winbase.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/winerror.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/winioctl.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/winnt.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/winsock.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/winsock2.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/winternl.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ws2def.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file:///usr/include/LIEF/ELF/NoteDetails/core/CorePrStatus.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/LIEF/PE.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/LIEF/PE/Parser.hpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file:///usr/include/LIEF/PE/exceptions_info/RuntimeFunctionX64.hpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file:///usr/include/bits/semaphore.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/c++/15.2.1/bits/alloc_traits.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/c++/15.2.1/bits/basic_string.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/c++/15.2.1/bits/hashtable.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/c++/15.2.1/bits/hashtable_policy.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/c++/15.2.1/bits/unordered_map.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/c++/15.2.1/ext/alloc_traits.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/c++/15.2.1/string" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:///usr/include/c++/15.2.1/type_traits" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="InvalidFacetManager">
     <ignored-facets>
@@ -171,7 +183,7 @@
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
     &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -183,6 +195,11 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.whisky_">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="_VS2022_Runner_" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="whisky_" TARGET_NAME="_VS2022_Runner_" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="whisky_" RUN_TARGET_NAME="_VS2022_Runner_">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -226,8 +243,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PY-252.25557.178" />
-        <option value="bundled-python-sdk-ce6832f46686-7b97d883f26b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.25557.178" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-PY-252.26199.168" />
+        <option value="bundled-python-sdk-b3d66beaba9a-c6efb3732140-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26199.168" />
       </set>
     </attachedChunks>
   </component>
@@ -264,7 +281,27 @@
       <workItem from="1758463692266" duration="2718000" />
       <workItem from="1758466479341" duration="18083000" />
       <workItem from="1758550843582" duration="10000" />
-      <workItem from="1758550976423" duration="28825000" />
+      <workItem from="1758550976423" duration="38168000" />
+      <workItem from="1758813171749" duration="652000" />
+      <workItem from="1758813849808" duration="7330000" />
+      <workItem from="1758821411996" duration="91000" />
+      <workItem from="1758821670750" duration="41000" />
+      <workItem from="1758822176499" duration="35695000" />
+      <workItem from="1758909642279" duration="24151000" />
+      <workItem from="1758982120074" duration="16590000" />
+      <workItem from="1759049527697" duration="3800000" />
+      <workItem from="1759053698717" duration="3538000" />
+      <workItem from="1759057787220" duration="8958000" />
+      <workItem from="1759068717127" duration="23455000" />
+      <workItem from="1759162136961" duration="1575000" />
+      <workItem from="1759163722261" duration="2556000" />
+      <workItem from="1759166290158" duration="3320000" />
+      <workItem from="1759169619883" duration="11704000" />
+      <workItem from="1759327925579" duration="24048000" />
+      <workItem from="1759411593241" duration="152000" />
+      <workItem from="1759418028344" duration="5814000" />
+      <workItem from="1759424179346" duration="35680000" />
+      <workItem from="1759518667192" duration="15963000" />
     </task>
     <task id="LOCAL-00001" summary="Initial shits">
       <option name="closed" value="true" />
@@ -298,7 +335,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757618980872</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="sth">
+      <option name="closed" value="true" />
+      <created>1758691716115</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1758691716115</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -333,18 +378,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial shits" />
     <MESSAGE value="a lot of stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="a lot of stuff" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/global.h</url>
-          <line>88</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="sth" />
+    <option name="LAST_COMMIT_MESSAGE" value="sth" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
